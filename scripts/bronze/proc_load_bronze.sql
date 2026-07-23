@@ -3,13 +3,15 @@
 Stored Procedure: Load Bronze Layer (Source -> Bronze)
 ===============================================================================
 Script Purpose:
-    This stored procedure loads data into the 'bronze' schema from external CSV files. 
+    This stored procedure loads data into the 'bronze' schema from external CSV files.
     It performs the following actions:
     - Truncates the bronze tables before loading data.
     - Uses the `BULK INSERT` command to load data from csv Files to bronze tables.
+    - Records a row in dbo.load_audit for every table loaded (success or failure),
+      grouped by a run_id so one EXEC's audit trail can be queried together.
 
 Parameters:
-    None. 
+    None.
 	  This stored procedure does not accept any parameters or return any values.
 
 Usage Example:
@@ -21,7 +23,10 @@ GO
 
 CREATE OR ALTER PROCEDURE bronze.load_bronze AS
 BEGIN
-	DECLARE @start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME; 
+	DECLARE @start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME;
+	DECLARE @run_id UNIQUEIDENTIFIER = NEWID();
+	DECLARE @current_table NVARCHAR(128);
+	DECLARE @rows INT;
 	BEGIN TRY
 		SET @batch_start_time = GETDATE();
 		PRINT '================================================';
@@ -32,6 +37,7 @@ BEGIN
 		PRINT 'Loading CRM Tables';
 		PRINT '------------------------------------------------';
 
+		SET @current_table = 'bronze.crm_cust_info';
 		SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: bronze.crm_cust_info';
 		TRUNCATE TABLE bronze.crm_cust_info;
@@ -44,10 +50,14 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
+		SET @rows = @@ROWCOUNT;
 		SET @end_time = GETDATE();
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
+        SET @current_table = 'bronze.crm_prd_info';
         SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: bronze.crm_prd_info';
 		TRUNCATE TABLE bronze.crm_prd_info;
@@ -61,10 +71,14 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
+		SET @rows = @@ROWCOUNT;
 		SET @end_time = GETDATE();
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
+        SET @current_table = 'bronze.crm_sales_details';
         SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: bronze.crm_sales_details';
 		TRUNCATE TABLE bronze.crm_sales_details;
@@ -77,14 +91,18 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
+		SET @rows = @@ROWCOUNT;
 		SET @end_time = GETDATE();
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
 		PRINT '------------------------------------------------';
 		PRINT 'Loading ERP Tables';
 		PRINT '------------------------------------------------';
-		
+
+		SET @current_table = 'bronze.erp_loc_a101';
 		SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: bronze.erp_loc_a101';
 		TRUNCATE TABLE bronze.erp_loc_a101;
@@ -97,10 +115,14 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
+		SET @rows = @@ROWCOUNT;
 		SET @end_time = GETDATE();
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
+		SET @current_table = 'bronze.erp_cust_az12';
 		SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: bronze.erp_cust_az12';
 		TRUNCATE TABLE bronze.erp_cust_az12;
@@ -113,10 +135,14 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
+		SET @rows = @@ROWCOUNT;
 		SET @end_time = GETDATE();
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
+		SET @current_table = 'bronze.erp_px_cat_g1v2';
 		SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: bronze.erp_px_cat_g1v2';
 		TRUNCATE TABLE bronze.erp_px_cat_g1v2;
@@ -129,7 +155,10 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
+		SET @rows = @@ROWCOUNT;
 		SET @end_time = GETDATE();
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
@@ -146,6 +175,10 @@ BEGIN
 		PRINT 'Error Message' + CAST (ERROR_NUMBER() AS NVARCHAR);
 		PRINT 'Error Message' + CAST (ERROR_STATE() AS NVARCHAR);
 		PRINT '==========================================';
+
+		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status, error_message)
+		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, GETDATE(), DATEDIFF(MILLISECOND, @start_time, GETDATE()), NULL, 'FAILED', ERROR_MESSAGE());
+
 		THROW;
 	END CATCH
 END

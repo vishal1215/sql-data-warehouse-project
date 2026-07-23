@@ -33,3 +33,15 @@ SELECT DISTINCT maintenance
 FROM silver.erp_px_cat_g1v2
 ORDER BY maintenance;
 GO
+
+-- Most recent bronze + silver load run, per table
+SELECT run_id, layer, table_name, start_time, duration_ms, rows_affected, status
+FROM dbo.load_audit
+WHERE run_id IN (
+    SELECT TOP 1 run_id FROM dbo.load_audit WHERE layer = 'bronze' ORDER BY start_time DESC
+)
+OR run_id IN (
+    SELECT TOP 1 run_id FROM dbo.load_audit WHERE layer = 'silver' ORDER BY start_time DESC
+)
+ORDER BY layer, start_time;
+GO

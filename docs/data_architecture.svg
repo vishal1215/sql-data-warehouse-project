@@ -1,0 +1,66 @@
+<svg viewBox="0 0 1180 420" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Data Warehouse Architecture</title>
+  <desc>CRM and ERP CSV sources flow through Bronze, Silver, and Gold layers into BI, ad-hoc SQL, and reporting consumers.</desc>
+  <rect width="1180" height="420" fill="#ffffff"/>
+
+  <!-- column headers -->
+  <text x="90" y="40" font-size="15" font-weight="700" fill="#334155">Sources</text>
+  <text x="330" y="40" font-size="15" font-weight="700" fill="#92400e">Bronze</text>
+  <text x="570" y="40" font-size="15" font-weight="700" fill="#475569">Silver</text>
+  <text x="810" y="40" font-size="15" font-weight="700" fill="#a16207">Gold</text>
+  <text x="1040" y="40" font-size="15" font-weight="700" fill="#334155">Consume</text>
+
+  <!-- Sources -->
+  <rect x="30" y="150" width="140" height="54" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="100" y="172" font-size="13" fill="#334155" text-anchor="middle">CRM CSVs</text>
+  <text x="100" y="190" font-size="10.5" fill="#64748b" text-anchor="middle">cust, prd, sales</text>
+
+  <rect x="30" y="230" width="140" height="54" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="100" y="252" font-size="13" fill="#334155" text-anchor="middle">ERP CSVs</text>
+  <text x="100" y="270" font-size="10.5" fill="#64748b" text-anchor="middle">cust, loc, category</text>
+
+  <!-- Bronze -->
+  <rect x="250" y="190" width="160" height="64" rx="8" fill="#fef3e2" stroke="#d97706"/>
+  <text x="330" y="215" font-size="13" font-weight="600" fill="#92400e" text-anchor="middle">Bronze Layer</text>
+  <text x="330" y="233" font-size="10.5" fill="#92400e" text-anchor="middle">raw tables, as-is</text>
+  <text x="330" y="247" font-size="10.5" fill="#92400e" text-anchor="middle">BULK INSERT, truncate + reload</text>
+
+  <!-- Silver -->
+  <rect x="490" y="190" width="160" height="64" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+  <text x="570" y="215" font-size="13" font-weight="600" fill="#334155" text-anchor="middle">Silver Layer</text>
+  <text x="570" y="233" font-size="10.5" fill="#334155" text-anchor="middle">cleansed, standardized</text>
+  <text x="570" y="247" font-size="10.5" fill="#334155" text-anchor="middle">dedup, normalize, derive</text>
+
+  <!-- Gold -->
+  <rect x="730" y="190" width="160" height="64" rx="8" fill="#fef9c3" stroke="#ca8a04"/>
+  <text x="810" y="215" font-size="13" font-weight="600" fill="#854d0e" text-anchor="middle">Gold Layer</text>
+  <text x="810" y="233" font-size="10.5" fill="#854d0e" text-anchor="middle">star schema, views</text>
+  <text x="810" y="247" font-size="10.5" fill="#854d0e" text-anchor="middle">business-ready, no load</text>
+
+  <!-- Consume -->
+  <rect x="1000" y="150" width="150" height="54" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="1075" y="172" font-size="13" fill="#334155" text-anchor="middle">Ad-hoc SQL</text>
+  <text x="1075" y="190" font-size="10.5" fill="#64748b" text-anchor="middle">analysis scripts</text>
+
+  <rect x="1000" y="230" width="150" height="54" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="1075" y="252" font-size="13" fill="#334155" text-anchor="middle">BI / Reporting</text>
+  <text x="1075" y="270" font-size="10.5" fill="#64748b" text-anchor="middle">dashboards</text>
+
+  <!-- arrows -->
+  <g stroke="#94a3b8" stroke-width="1.6" fill="none" marker-end="url(#arrow)">
+    <path d="M170,177 L250,214"/>
+    <path d="M170,257 L250,230"/>
+    <path d="M410,222 L490,222"/>
+    <path d="M650,222 L730,222"/>
+    <path d="M890,208 L1000,177"/>
+    <path d="M890,236 L1000,257"/>
+  </g>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <text x="590" y="340" font-size="11" fill="#94a3b8" text-anchor="middle">Medallion architecture — sql-data-warehouse-project</text>
+</svg>

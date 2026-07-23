@@ -9,7 +9,9 @@ A hands-on data warehousing project built with Microsoft SQL Server, implementin
 ## 🏗️ Data Architecture
 
 The data architecture follows the Medallion pattern across **Bronze**, **Silver**, and **Gold** layers:
-![Data Architecture](docs/data_architecture.png)
+![Data Architecture](docs/data_architecture.svg)
+
+See also: [docs/data_flow.svg](docs/data_flow.svg) (table-level lineage) and [docs/data_model.svg](docs/data_model.svg) (Gold layer star schema).
 
 1. **Bronze Layer**: Raw data loaded as-is from source CSV files into SQL Server via `BULK INSERT`.
 2. **Silver Layer**: Cleansed, standardized, and deduplicated data ready for modeling.
@@ -38,14 +40,15 @@ This project covers:
 See [MAC_DOCKER_SETUP.md](MAC_DOCKER_SETUP.md) for the full Docker-based walkthrough. In short, run:
 
 1. `scripts/init_database.sql`
-2. `scripts/bronze/ddl_bronze.sql`
-3. `scripts/bronze/proc_load_bronze.sql`, then `EXEC bronze.load_bronze;`
-4. `scripts/silver/ddl_silver.sql`
-5. `scripts/silver/proc_load_silver.sql`, then `EXEC silver.load_silver;`
-6. `tests/quality_checks_silver.sql`
-7. `scripts/gold/ddl_gold.sql`
-8. `tests/quality_checks_gold.sql`
-9. `tests/setup_verification.sql`
+2. `scripts/ddl_load_audit.sql`
+3. `scripts/bronze/ddl_bronze.sql`
+4. `scripts/bronze/proc_load_bronze.sql`, then `EXEC bronze.load_bronze;`
+5. `scripts/silver/ddl_silver.sql`
+6. `scripts/silver/proc_load_silver.sql`, then `EXEC silver.load_silver;`
+7. `tests/quality_checks_silver.sql`
+8. `scripts/gold/ddl_gold.sql`
+9. `tests/quality_checks_gold.sql`
+10. `tests/setup_verification.sql`
 
 ---
 
@@ -58,6 +61,10 @@ The course targets SQL Server on Windows. Getting it running cleanly on SQL Serv
 - **Docker parallel-query hang**: small `GROUP BY` queries against the Gold layer views would hang indefinitely with a `CXCONSUMER` wait — SQL Server picking a parallel plan that the Docker Desktop VM's scheduler never resolves. Fixed by setting `max degree of parallelism = 1` on the instance (appropriate anyway for a small dev/learning workload).
 - File paths, line endings (CRLF → LF), and ERP filename casing were also adjusted for the Linux/Docker environment.
 
+## ✅ What I added on top of the course
+
+- **Load audit table** (`scripts/ddl_load_audit.sql`, `dbo.load_audit`): the original procedures only logged progress via `PRINT` statements, which disappear once the session closes. Both `bronze.load_bronze` and `silver.load_silver` now write a row per table per run — duration, row count, and success/failure — grouped by a `run_id`, so every load is queryable after the fact instead of only visible in the console at the time. Verified working end-to-end; see `tests/setup_verification.sql` for a query against it.
+
 ---
 
 ## 📂 Repository Structure
@@ -66,14 +73,15 @@ sql-data-warehouse-project/
 │
 ├── datasets/                           # Raw datasets used for the project (ERP and CRM data)
 │
-├── docs/                               # Project documentation and architecture details
-│   ├── data_architecture.png           # High-level architecture diagram
+├── docs/                               # Project documentation and architecture details (original diagrams)
+│   ├── data_architecture.svg           # High-level architecture diagram
 │   ├── data_catalog.md                 # Catalog of datasets, including field descriptions and metadata
-│   ├── data_flow.png                   # Data flow diagram
-│   ├── data_model.png                  # Star schema data model
+│   ├── data_flow.svg                   # Table-level data lineage diagram
+│   ├── data_model.svg                  # Gold layer star schema diagram
 │   ├── naming_conventions.md           # Naming guidelines for tables, columns, and files
 │
 ├── scripts/                            # SQL scripts for ETL and transformations
+│   ├── ddl_load_audit.sql              # Load audit table (added on top of the course)
 │   ├── bronze/                         # Scripts for extracting and loading raw data
 │   ├── silver/                         # Scripts for cleaning and transforming data
 │   ├── gold/                           # Scripts for creating analytical models

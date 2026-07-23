@@ -1,0 +1,58 @@
+<svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Gold Layer Star Schema</title>
+  <desc>Star schema with fact_sales at the center, connected to dim_customers and dim_products on their surrogate keys.</desc>
+  <rect width="900" height="480" fill="#ffffff"/>
+
+  <!-- dim_customers -->
+  <rect x="40" y="40" width="260" height="230" rx="8" fill="#fef9c3" stroke="#ca8a04"/>
+  <rect x="40" y="40" width="260" height="34" rx="8" fill="#ca8a04"/>
+  <text x="170" y="63" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">gold.dim_customers</text>
+  <g font-size="11.5" fill="#57534e">
+    <text x="56" y="92">customer_key (PK)</text>
+    <text x="56" y="112">customer_id</text>
+    <text x="56" y="132">customer_number</text>
+    <text x="56" y="152">first_name, last_name</text>
+    <text x="56" y="172">country</text>
+    <text x="56" y="192">marital_status</text>
+    <text x="56" y="212">gender</text>
+    <text x="56" y="232">birthdate</text>
+    <text x="56" y="252">create_date</text>
+  </g>
+
+  <!-- fact_sales -->
+  <rect x="330" y="130" width="260" height="230" rx="8" fill="#fef3e2" stroke="#d97706"/>
+  <rect x="330" y="130" width="260" height="34" rx="8" fill="#d97706"/>
+  <text x="460" y="153" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">gold.fact_sales</text>
+  <g font-size="11.5" fill="#57534e">
+    <text x="346" y="182">order_number</text>
+    <text x="346" y="202">customer_key (FK)</text>
+    <text x="346" y="222">product_key (FK)</text>
+    <text x="346" y="242">order_date</text>
+    <text x="346" y="262">shipping_date</text>
+    <text x="346" y="282">due_date</text>
+    <text x="346" y="302">sales_amount, quantity, price</text>
+  </g>
+
+  <!-- dim_products -->
+  <rect x="620" y="40" width="260" height="230" rx="8" fill="#fef9c3" stroke="#ca8a04"/>
+  <rect x="620" y="40" width="260" height="34" rx="8" fill="#ca8a04"/>
+  <text x="750" y="63" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">gold.dim_products</text>
+  <g font-size="11.5" fill="#57534e">
+    <text x="636" y="92">product_key (PK)</text>
+    <text x="636" y="112">product_id, product_number</text>
+    <text x="636" y="132">product_name</text>
+    <text x="636" y="152">category_id, category</text>
+    <text x="636" y="172">subcategory</text>
+    <text x="636" y="192">maintenance_required</text>
+    <text x="636" y="212">cost</text>
+    <text x="636" y="232">product_line</text>
+    <text x="636" y="252">start_date</text>
+  </g>
+
+  <g stroke="#a8a29e" stroke-width="1.6" fill="none">
+    <path d="M300,155 L330,205"/>
+    <path d="M620,155 L590,205"/>
+  </g>
+
+  <text x="450" y="420" font-size="11" fill="#94a3b8" text-anchor="middle">Star schema — gold.fact_sales references both dimensions on their surrogate keys</text>
+</svg>

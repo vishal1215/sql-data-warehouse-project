@@ -1,0 +1,67 @@
+<svg viewBox="0 0 1180 400" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Table-level Data Flow</title>
+  <desc>CRM and ERP source tables flow through Bronze and Silver schemas into the three Gold layer objects: dim_customers, dim_products, and fact_sales.</desc>
+  <rect width="1180" height="400" fill="#ffffff"/>
+
+  <text x="140" y="35" font-size="13" font-weight="700" fill="#334155" text-anchor="middle">Source CSVs</text>
+  <text x="400" y="35" font-size="13" font-weight="700" fill="#92400e" text-anchor="middle">Bronze</text>
+  <text x="660" y="35" font-size="13" font-weight="700" fill="#475569" text-anchor="middle">Silver</text>
+  <text x="960" y="35" font-size="13" font-weight="700" fill="#a16207" text-anchor="middle">Gold</text>
+
+  <!-- CRM row -->
+  <rect x="60" y="80" width="160" height="50" rx="7" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="140" y="100" font-size="11.5" fill="#334155" text-anchor="middle">source_crm/*.csv</text>
+  <text x="140" y="116" font-size="9.5" fill="#64748b" text-anchor="middle">cust_info, prd_info, sales_details</text>
+
+  <rect x="320" y="80" width="160" height="50" rx="7" fill="#fef3e2" stroke="#d97706"/>
+  <text x="400" y="100" font-size="11.5" fill="#92400e" text-anchor="middle">bronze.crm_*</text>
+  <text x="400" y="116" font-size="9.5" fill="#92400e" text-anchor="middle">3 tables, raw</text>
+
+  <rect x="580" y="80" width="160" height="50" rx="7" fill="#f1f5f9" stroke="#64748b"/>
+  <text x="660" y="100" font-size="11.5" fill="#334155" text-anchor="middle">silver.crm_*</text>
+  <text x="660" y="116" font-size="9.5" fill="#334155" text-anchor="middle">3 tables, cleansed</text>
+
+  <!-- ERP row -->
+  <rect x="60" y="180" width="160" height="50" rx="7" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="140" y="200" font-size="11.5" fill="#334155" text-anchor="middle">source_erp/*.csv</text>
+  <text x="140" y="216" font-size="9.5" fill="#64748b" text-anchor="middle">CUST_AZ12, LOC_A101, PX_CAT_G1V2</text>
+
+  <rect x="320" y="180" width="160" height="50" rx="7" fill="#fef3e2" stroke="#d97706"/>
+  <text x="400" y="200" font-size="11.5" fill="#92400e" text-anchor="middle">bronze.erp_*</text>
+  <text x="400" y="216" font-size="9.5" fill="#92400e" text-anchor="middle">3 tables, raw</text>
+
+  <rect x="580" y="180" width="160" height="50" rx="7" fill="#f1f5f9" stroke="#64748b"/>
+  <text x="660" y="200" font-size="11.5" fill="#334155" text-anchor="middle">silver.erp_*</text>
+  <text x="660" y="216" font-size="9.5" fill="#334155" text-anchor="middle">3 tables, cleansed</text>
+
+  <!-- Gold column -->
+  <rect x="860" y="60" width="180" height="46" rx="7" fill="#fef9c3" stroke="#ca8a04"/>
+  <text x="950" y="88" font-size="11.5" fill="#854d0e" text-anchor="middle">gold.dim_customers</text>
+
+  <rect x="860" y="130" width="180" height="46" rx="7" fill="#fef9c3" stroke="#ca8a04"/>
+  <text x="950" y="158" font-size="11.5" fill="#854d0e" text-anchor="middle">gold.dim_products</text>
+
+  <rect x="860" y="200" width="180" height="46" rx="7" fill="#fef9c3" stroke="#ca8a04"/>
+  <text x="950" y="228" font-size="11.5" fill="#854d0e" text-anchor="middle">gold.fact_sales</text>
+
+  <g stroke="#94a3b8" stroke-width="1.4" fill="none" marker-end="url(#arrow2)">
+    <path d="M220,105 L320,105"/>
+    <path d="M220,205 L320,205"/>
+    <path d="M480,105 L580,105"/>
+    <path d="M480,205 L580,205"/>
+    <path d="M740,100 C 790,85 800,83 858,83"/>
+    <path d="M740,110 C 800,145 810,150 858,153"/>
+    <path d="M740,200 C 800,175 810,165 858,158"/>
+    <path d="M740,210 C 800,220 810,222 858,223"/>
+  </g>
+
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <text x="950" y="290" font-size="10" fill="#64748b" text-anchor="middle">dim_customers joins silver.crm_cust_info + silver.erp_cust_az12 + silver.erp_loc_a101</text>
+  <text x="950" y="306" font-size="10" fill="#64748b" text-anchor="middle">dim_products joins silver.crm_prd_info + silver.erp_px_cat_g1v2</text>
+  <text x="950" y="322" font-size="10" fill="#64748b" text-anchor="middle">fact_sales joins silver.crm_sales_details to both dimensions on their surrogate keys</text>
+</svg>

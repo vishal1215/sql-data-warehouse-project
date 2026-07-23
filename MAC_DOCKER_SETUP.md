@@ -25,16 +25,17 @@ This edition keeps the tutor's original project structure while making it work w
 5. Run these files and commands in this exact order:
 
    1. `scripts/init_database.sql`
-   2. `scripts/bronze/ddl_bronze.sql`
-   3. `scripts/bronze/proc_load_bronze.sql`
-   4. `EXEC bronze.load_bronze;`
-   5. `scripts/silver/ddl_silver.sql`
-   6. `scripts/silver/proc_load_silver.sql`
-   7. `EXEC silver.load_silver;`
-   8. `tests/quality_checks_silver.sql`
-   9. `scripts/gold/ddl_gold.sql`
-   10. `tests/quality_checks_gold.sql`
-   11. `tests/setup_verification.sql`
+   2. `scripts/ddl_load_audit.sql`
+   3. `scripts/bronze/ddl_bronze.sql`
+   4. `scripts/bronze/proc_load_bronze.sql`
+   5. `EXEC bronze.load_bronze;`
+   6. `scripts/silver/ddl_silver.sql`
+   7. `scripts/silver/proc_load_silver.sql`
+   8. `EXEC silver.load_silver;`
+   9. `tests/quality_checks_silver.sql`
+   10. `scripts/gold/ddl_gold.sql`
+   11. `tests/quality_checks_gold.sql`
+   12. `tests/setup_verification.sql`
 
 The initialization script drops and recreates `DataWarehouse`. Run this setup sequence once, not at the start of every lesson.
 
