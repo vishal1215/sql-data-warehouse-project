@@ -50,7 +50,7 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM bronze.crm_cust_info);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -71,7 +71,7 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM bronze.crm_prd_info);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -91,7 +91,7 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM bronze.crm_sales_details);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -115,7 +115,7 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM bronze.erp_loc_a101);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -135,7 +135,7 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM bronze.erp_cust_az12);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -155,7 +155,7 @@ BEGIN
 			ROWTERMINATOR = '0x0a',
 			TABLOCK
 		);
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM bronze.erp_px_cat_g1v2);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'bronze', 'bronze.load_bronze', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');

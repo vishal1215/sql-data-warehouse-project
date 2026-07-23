@@ -79,7 +79,7 @@ BEGIN
 			WHERE cst_id IS NOT NULL
 		) t
 		WHERE flag_last = 1; -- Select the most recent record per customer
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM silver.crm_cust_info);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'silver', 'silver.load_silver', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -121,7 +121,7 @@ BEGIN
 				AS DATE
 			) AS prd_end_dt -- Calculate end date as one day before the next start date
 		FROM bronze.crm_prd_info;
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM silver.crm_prd_info);
         SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'silver', 'silver.load_silver', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -173,7 +173,7 @@ BEGIN
 				ELSE sls_price  -- Derive price if original value is invalid
 			END AS sls_price
 		FROM bronze.crm_sales_details;
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM silver.crm_sales_details);
         SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'silver', 'silver.load_silver', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -206,7 +206,7 @@ BEGIN
 				ELSE 'n/a'
 			END AS gen -- Normalize gender values and handle unknown cases
 		FROM bronze.erp_cust_az12;
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM silver.erp_cust_az12);
 	    SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'silver', 'silver.load_silver', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -236,7 +236,7 @@ BEGIN
 				ELSE TRIM(REPLACE(cntry, CHAR(13), ''))
 			END AS cntry -- Normalize and Handle missing or blank country codes
 		FROM bronze.erp_loc_a101;
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM silver.erp_loc_a101);
 	    SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'silver', 'silver.load_silver', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
@@ -261,7 +261,7 @@ BEGIN
 			subcat,
 			TRIM(REPLACE(maintenance, CHAR(13), '')) AS maintenance
 		FROM bronze.erp_px_cat_g1v2;
-		SET @rows = @@ROWCOUNT;
+		SET @rows = (SELECT COUNT(*) FROM silver.erp_px_cat_g1v2);
 		SET @end_time = GETDATE();
 		INSERT INTO dbo.load_audit (run_id, layer, procedure_name, table_name, start_time, end_time, duration_ms, rows_affected, status)
 		VALUES (@run_id, 'silver', 'silver.load_silver', @current_table, @start_time, @end_time, DATEDIFF(MILLISECOND, @start_time, @end_time), @rows, 'SUCCESS');
