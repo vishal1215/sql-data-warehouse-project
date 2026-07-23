@@ -5,6 +5,8 @@ A Medallion-architecture data warehouse on Microsoft SQL Server — Bronze, Silv
 
 > **macOS + Docker:** see [MAC_DOCKER_SETUP.md](MAC_DOCKER_SETUP.md) for the containerized build and run procedure.
 
+> **Companion project:** [SQL Data Analytics Project](https://github.com/vishal1215/sql-data-analytics-project) — exploratory analysis, segmentation, and reporting built on top of the Gold-layer star schema produced here.
+
 ---
 ## 🖼️ Project at a Glance
 
