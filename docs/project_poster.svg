@@ -1,0 +1,236 @@
+<svg viewBox="0 0 900 1520" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>SQL Data Warehouse Project — End-to-End Architecture &amp; Working Flow</title>
+  <desc>Poster summarizing the SQL Server data warehouse project: data sources, ingestion, medallion architecture, load auditing, engineering fixes, analytics consumption, project structure, and the complete working flow.</desc>
+  <rect width="900" height="1520" fill="#ffffff"/>
+
+  <defs>
+    <marker id="pArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- ============================= HEADER ============================= -->
+  <text x="450" y="46" font-size="30" font-weight="800" fill="#0f172a" text-anchor="middle">SQL DATA WAREHOUSE PROJECT</text>
+  <text x="450" y="72" font-size="14.5" fill="#475569" text-anchor="middle">End-to-End Data Engineering — Medallion Architecture on SQL Server</text>
+
+  <rect x="40" y="94" width="820" height="52" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="62" y="126" font-size="15" font-weight="700" fill="#0f172a">SQL SERVER  +  T-SQL  +  DOCKER</text>
+  <text x="838" y="118" font-size="10.5" fill="#64748b" text-anchor="end">Raw CRM/ERP CSVs → auditable, business-ready star schema</text>
+  <text x="838" y="132" font-size="10.5" fill="#64748b" text-anchor="end">Bronze → Silver → Gold, with run-level load auditing</text>
+
+  <!-- ============================= 1 + 2 ROW ============================= -->
+  <rect x="40" y="172" width="390" height="108" rx="10" fill="#ffffff" stroke="#dbeafe" stroke-width="1.5"/>
+  <rect x="40" y="172" width="176" height="26" rx="13" fill="#2563eb"/>
+  <text x="128" y="189" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">1. DATA SOURCES</text>
+  <g transform="translate(58,212)" stroke="#2563eb" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 1h9l4 4v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+    <path d="M10 1v4h4"/>
+  </g>
+  <text x="82" y="223" font-size="12" font-weight="600" fill="#1e293b">CRM CSVs</text>
+  <text x="82" y="237" font-size="9.5" fill="#94a3b8">cust_info · prd_info · sales_details</text>
+  <g transform="translate(58,244)" stroke="#2563eb" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 1h9l4 4v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+    <path d="M10 1v4h4"/>
+  </g>
+  <text x="82" y="255" font-size="12" font-weight="600" fill="#1e293b">ERP CSVs</text>
+  <text x="82" y="269" font-size="9.5" fill="#94a3b8">CUST_AZ12 · LOC_A101 · PX_CAT_G1V2</text>
+
+  <rect x="470" y="172" width="390" height="108" rx="10" fill="#fffaf3" stroke="#f3d0a3" stroke-width="1.5"/>
+  <rect x="470" y="172" width="230" height="26" rx="13" fill="#c2670c"/>
+  <text x="585" y="189" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">2. INGESTION → BRONZE</text>
+  <g transform="translate(488,212)" stroke="#c2670c" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="2" width="16" height="12" rx="2"/>
+    <circle cx="4" cy="17" r="1.4" fill="#c2670c" stroke="none"/>
+    <circle cx="12" cy="17" r="1.4" fill="#c2670c" stroke="none"/>
+  </g>
+  <text x="512" y="223" font-size="12" font-weight="600" fill="#7c3a0a">SQL Server (Docker container)</text>
+  <text x="512" y="238" font-size="9.5" font-family="'SF Mono', Consolas, monospace" fill="#c2670c">BULK INSERT · TRUNCATE + reload</text>
+  <text x="512" y="252" font-size="9.5" font-family="'SF Mono', Consolas, monospace" fill="#c2670c">proc_load_bronze.sql</text>
+
+  <!-- ============================= 3: MEDALLION ARCHITECTURE ============================= -->
+  <rect x="40" y="300" width="820" height="350" rx="12" fill="#ffffff" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="40" y="300" width="260" height="30" rx="15" fill="#1e293b"/>
+  <text x="170" y="320" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">3. MEDALLION ARCHITECTURE</text>
+
+  <!-- Bronze column -->
+  <circle cx="140" cy="368" r="16" fill="#d97706"/>
+  <path d="M140,357l2.6,5.3 5.9,0.9 -4.3,4.1 1,5.8 -5.2,-2.7 -5.2,2.7 1,-5.8 -4.3,-4.1 5.9,-0.9z" fill="#fde68a"/>
+  <text x="170" y="373" font-size="14" font-weight="700" fill="#92400e">BRONZE</text>
+  <text x="170" y="388" font-size="10" fill="#a16621">Raw Layer</text>
+  <rect x="65" y="405" width="250" height="215" rx="8" fill="#fffaf3" stroke="#f3d0a3"/>
+  <g font-size="10" font-family="'SF Mono', Consolas, monospace" fill="#92400e">
+    <text x="78" y="425">bronze.crm_cust_info</text>
+    <text x="78" y="442">bronze.crm_prd_info</text>
+    <text x="78" y="459">bronze.crm_sales_details</text>
+    <text x="78" y="476">bronze.erp_loc_a101</text>
+    <text x="78" y="493">bronze.erp_cust_az12</text>
+    <text x="78" y="510">bronze.erp_px_cat_g1v2</text>
+  </g>
+  <line x1="78" y1="522" x2="302" y2="522" stroke="#f3d0a3"/>
+  <g font-size="10" fill="#a16621">
+    <text x="78" y="540">• BULK INSERT, truncate &amp; reload</text>
+    <text x="78" y="557">• No transformation applied</text>
+    <text x="78" y="574">• Traceability &amp; debugging</text>
+    <text x="78" y="591">• Object type: tables</text>
+  </g>
+
+  <!-- Silver column -->
+  <circle cx="400" cy="368" r="16" fill="#94a3b8"/>
+  <path d="M400,357l2.6,5.3 5.9,0.9 -4.3,4.1 1,5.8 -5.2,-2.7 -5.2,2.7 1,-5.8 -4.3,-4.1 5.9,-0.9z" fill="#f1f5f9"/>
+  <text x="430" y="373" font-size="14" font-weight="700" fill="#334155">SILVER</text>
+  <text x="430" y="388" font-size="10" fill="#64748b">Clean &amp; Enriched</text>
+  <rect x="325" y="405" width="250" height="215" rx="8" fill="#f8fafc" stroke="#dbe3ec"/>
+  <g font-size="10" font-family="'SF Mono', Consolas, monospace" fill="#334155">
+    <text x="338" y="425">silver.crm_cust_info</text>
+    <text x="338" y="442">silver.crm_prd_info</text>
+    <text x="338" y="459">silver.crm_sales_details</text>
+    <text x="338" y="476">silver.erp_loc_a101</text>
+    <text x="338" y="493">silver.erp_cust_az12</text>
+    <text x="338" y="510">silver.erp_px_cat_g1v2</text>
+  </g>
+  <line x1="338" y1="522" x2="562" y2="522" stroke="#dbe3ec"/>
+  <g font-size="10" fill="#64748b">
+    <text x="338" y="540">• Dedup via ROW_NUMBER()</text>
+    <text x="338" y="557">• Standardize &amp; derive columns</text>
+    <text x="338" y="574">• Business rules applied</text>
+    <text x="338" y="591">• Object type: tables</text>
+  </g>
+
+  <!-- Gold column -->
+  <circle cx="660" cy="368" r="16" fill="#ca8a04"/>
+  <path d="M660,357l2.6,5.3 5.9,0.9 -4.3,4.1 1,5.8 -5.2,-2.7 -5.2,2.7 1,-5.8 -4.3,-4.1 5.9,-0.9z" fill="#fef9c3"/>
+  <text x="690" y="373" font-size="14" font-weight="700" fill="#854d0e">GOLD</text>
+  <text x="690" y="388" font-size="10" fill="#a16621">Analytics Layer</text>
+  <rect x="585" y="405" width="250" height="215" rx="8" fill="#fffdf0" stroke="#efe0a3"/>
+  <g font-size="10" font-family="'SF Mono', Consolas, monospace" fill="#854d0e">
+    <text x="598" y="425">gold.dim_customers</text>
+    <text x="598" y="442">gold.dim_products</text>
+    <text x="598" y="459">gold.fact_sales</text>
+  </g>
+  <line x1="598" y1="475" x2="822" y2="475" stroke="#efe0a3"/>
+  <g font-size="10" fill="#a16621">
+    <text x="598" y="493">• Star schema, surrogate keys</text>
+    <text x="598" y="510">• Views — no load, computed live</text>
+    <text x="598" y="527">• BI &amp; ad-hoc query ready</text>
+    <text x="598" y="544">• Object type: views</text>
+  </g>
+
+  <g stroke="#94a3b8" stroke-width="2" marker-end="url(#pArrow)">
+    <path d="M318,510 L322,510"/>
+    <path d="M578,510 L582,510"/>
+  </g>
+
+  <!-- ============================= 4: LOAD AUDIT ============================= -->
+  <rect x="40" y="670" width="820" height="190" rx="12" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <rect x="40" y="670" width="400" height="30" rx="15" fill="#16a34a"/>
+  <text x="240" y="690" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">4. LOAD AUDIT — RUN-LEVEL TRACKING (dbo.load_audit)</text>
+
+  <rect x="70" y="715" width="360" height="120" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="90" y="740" font-size="12.5" font-weight="700" fill="#15803d" font-family="'SF Mono', Consolas, monospace">bronze.load_bronze</text>
+  <g font-size="10" fill="#166534">
+    <text x="90" y="760">• run_id, table_name per invocation</text>
+    <text x="90" y="778">• start_time, end_time, duration_ms</text>
+    <text x="90" y="796">• rows_affected via COUNT(*)</text>
+    <text x="90" y="814">• status: SUCCESS / FAILED + error_message</text>
+  </g>
+
+  <rect x="470" y="715" width="360" height="120" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="490" y="740" font-size="12.5" font-weight="700" fill="#15803d" font-family="'SF Mono', Consolas, monospace">silver.load_silver</text>
+  <g font-size="10" fill="#166534">
+    <text x="490" y="760">• run_id, table_name per invocation</text>
+    <text x="490" y="778">• start_time, end_time, duration_ms</text>
+    <text x="490" y="796">• rows_affected via COUNT(*)</text>
+    <text x="490" y="814">• status: SUCCESS / FAILED + error_message</text>
+  </g>
+
+  <!-- ============================= 5: ENGINEERING NOTES ============================= -->
+  <rect x="40" y="890" width="820" height="240" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+  <rect x="40" y="890" width="320" height="30" rx="15" fill="#7c3aed"/>
+  <text x="200" y="910" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">5. ENGINEERING NOTES — PLATFORM FIXES</text>
+
+  <g font-size="11" fill="#4c1d95">
+    <circle cx="72" cy="945" r="4" fill="#7c3aed"/>
+    <text x="86" y="949"><tspan font-weight="700">Unsupported BULK INSERT codepage —</tspan> CODEPAGE='65001' rejected outright by SQL Server on Linux; removed.</text>
+
+    <circle cx="72" cy="978" r="4" fill="#7c3aed"/>
+    <text x="86" y="982"><tspan font-weight="700">THROW batch-termination constraint —</tspan> missing semicolon before THROW broke CATCH blocks silently.</text>
+
+    <circle cx="72" cy="1011" r="4" fill="#7c3aed"/>
+    <text x="86" y="1015"><tspan font-weight="700">Docker scheduler starvation (CXCONSUMER) —</tspan> parallel plan hung on small tables; fixed via MAXDOP=1.</text>
+
+    <circle cx="72" cy="1044" r="4" fill="#7c3aed"/>
+    <text x="86" y="1048"><tspan font-weight="700">Client reconnection invalidating @@ROWCOUNT —</tspan> VS Code SQL extension reconnect (Msg 4083); switched to COUNT(*).</text>
+  </g>
+  <line x1="70" y1="1070" x2="830" y2="1070" stroke="#ede9fe"/>
+  <text x="450" y="1095" font-size="10.5" fill="#7c3aed" text-anchor="middle" font-style="italic">Diagnosed via sys.dm_exec_requests / sys.dm_exec_sessions — infrastructure debugging, not SQL logic</text>
+
+  <!-- ============================= 6 + PROJECT STRUCTURE ============================= -->
+  <rect x="40" y="1150" width="390" height="190" rx="12" fill="#ffffff" stroke="#a21caf" stroke-width="1.5"/>
+  <rect x="40" y="1150" width="280" height="30" rx="15" fill="#a21caf"/>
+  <text x="180" y="1170" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">6. ANALYTICS &amp; CONSUMPTION</text>
+
+  <g transform="translate(70,1195)" stroke="#a21caf" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 16l6-6 4 4 8-8"/><path d="M14 6h6v6"/>
+  </g>
+  <text x="105" y="1210" font-size="12" font-weight="600" fill="#701a75">Ad-hoc SQL analysis</text>
+
+  <g transform="translate(70,1228)" stroke="#a21caf" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="8" width="4" height="8" fill="#a21caf" stroke="none"/>
+    <rect x="7" y="3" width="4" height="13" fill="#a21caf" stroke="none"/>
+    <rect x="14" y="0" width="4" height="16" fill="#a21caf" stroke="none"/>
+  </g>
+  <text x="105" y="1241" font-size="12" font-weight="600" fill="#701a75">BI &amp; reporting dashboards</text>
+
+  <g transform="translate(70,1261)" stroke="#a21caf" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 1l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V5z"/>
+    <path d="M6 9l2.5 2.5L13 6.5"/>
+  </g>
+  <text x="105" y="1275" font-size="12" font-weight="600" fill="#701a75">Automated quality checks</text>
+
+  <rect x="470" y="1150" width="390" height="190" rx="12" fill="#ffffff" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="470" y="1150" width="230" height="30" rx="15" fill="#1e293b"/>
+  <text x="585" y="1170" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">PROJECT STRUCTURE</text>
+  <g font-size="10.5" font-family="'SF Mono', Consolas, monospace" fill="#334155">
+    <text x="486" y="1198">scripts/</text>
+    <text x="500" y="1213">ddl_load_audit.sql</text>
+    <text x="500" y="1228">bronze/  → ddl, proc_load_bronze</text>
+    <text x="500" y="1243">silver/  → ddl, proc_load_silver</text>
+    <text x="500" y="1258">gold/    → ddl_gold.sql</text>
+    <text x="486" y="1276">tests/   → quality checks, verify</text>
+    <text x="486" y="1294">docs/    → diagrams, catalog</text>
+    <text x="486" y="1312">datasets/ → source_crm/, source_erp/</text>
+  </g>
+
+  <!-- ============================= COMPLETE WORKING FLOW ============================= -->
+  <rect x="40" y="1360" width="820" height="140" rx="12" fill="#0f172a"/>
+  <text x="450" y="1388" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">COMPLETE WORKING FLOW</text>
+
+  <g font-size="9.5" fill="#cbd5e1" text-anchor="middle">
+    <circle cx="115" cy="1430" r="22" fill="#334155"/><text x="115" y="1434" fill="#ffffff" font-weight="700" font-size="13">1</text>
+    <text x="115" y="1465">CSV Sources</text>
+
+    <circle cx="255" cy="1430" r="22" fill="#c2670c"/><text x="255" y="1434" fill="#ffffff" font-weight="700" font-size="13">2</text>
+    <text x="255" y="1465">Docker / SQL Server</text>
+
+    <circle cx="395" cy="1430" r="22" fill="#d97706"/><text x="395" y="1434" fill="#ffffff" font-weight="700" font-size="13">3</text>
+    <text x="395" y="1465">Bronze (raw)</text>
+
+    <circle cx="535" cy="1430" r="22" fill="#64748b"/><text x="535" y="1434" fill="#ffffff" font-weight="700" font-size="13">4</text>
+    <text x="535" y="1465">Silver (cleansed)</text>
+
+    <circle cx="675" cy="1430" r="22" fill="#ca8a04"/><text x="675" y="1434" fill="#ffffff" font-weight="700" font-size="13">5</text>
+    <text x="675" y="1465">Gold (star schema)</text>
+
+    <circle cx="800" cy="1430" r="22" fill="#a21caf"/><text x="800" y="1434" fill="#ffffff" font-weight="700" font-size="13">6</text>
+    <text x="800" y="1465">Analytics &amp; BI</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" marker-end="url(#pArrow)">
+    <path d="M139,1430 L233,1430"/>
+    <path d="M279,1430 L373,1430"/>
+    <path d="M419,1430 L511,1430"/>
+    <path d="M559,1430 L651,1430"/>
+    <path d="M699,1430 L776,1430"/>
+  </g>
+
+  <text x="450" y="1512" font-size="10.5" fill="#94a3b8" text-anchor="middle">sql-data-warehouse-project — built on Data With Baraa's course, own implementation and additions</text>
+</svg>
