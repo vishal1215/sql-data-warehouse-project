@@ -6,6 +6,11 @@ A Medallion-architecture data warehouse on Microsoft SQL Server — Bronze, Silv
 > **macOS + Docker:** see [MAC_DOCKER_SETUP.md](MAC_DOCKER_SETUP.md) for the containerized build and run procedure.
 
 ---
+## 🖼️ Project at a Glance
+
+![Project Poster](docs/project_poster.svg)
+
+---
 ## 🏗️ Data Architecture
 
 Three-layer Medallion pattern — each layer a distinct trust and transformation boundary:
